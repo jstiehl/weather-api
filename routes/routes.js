@@ -60,11 +60,13 @@ module.exports = function(router) {
    * This of course did not happen to me :-) Ok maybe it did.
    * @return {Promise} resolves with temp data from mock_data.json
    */
-  var mockFetch = function() {
+  var mockFetch = function(i) {
+    var random = Math.random();
+    var noise = random > 0.5 ? Math.random()*5 : -Math.random()*5;
     var temps = _.map(mockData.hourly.data, function(hourlyData){
       return {
-        time: moment.unix(hourlyData.time).format(),
-        temperature: hourlyData.temperature
+        time: moment.unix(hourlyData.time).add(i, 'd').format(),
+        temperature: hourlyData.temperature + noise
       };
     });
 
@@ -87,7 +89,9 @@ module.exports = function(router) {
         promises.push(fetchWeatherData(lat, long, day));
       });
     } else {
-      promises.push(mockFetch());
+      for(var i = 0; i < 31; i++){
+        promises.push(mockFetch(i));
+      }
     }
 
     return Promise.all(promises);
