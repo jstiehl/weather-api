@@ -148,7 +148,7 @@ module.exports = function(router) {
           lat: req.query.lat || 45.5898,
           long: req.query.long || -122.5951
         };
-        return getMonthlyTempsByDay(month, location, true);  
+        return getMonthlyTempsByDay(month, location);  
       })
       .then(formatMonthlyTemps)
       .then(function(data){
